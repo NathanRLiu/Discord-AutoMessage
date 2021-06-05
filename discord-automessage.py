@@ -34,6 +34,7 @@ def sendMessage(daChannelID, daMessage):
     
     res = conn.getresponse()
     data = res.read()
+    payload = payload.encode(encoding='utf-8')
     print("Payload:"+payload)
     conn.request("POST", "/api/v9/channels/"+str(daChannelID)+"/messages", payload, headers)
     daCount += 1
@@ -57,6 +58,7 @@ def sendReply(daChannelID, daMessage, msgToReply, pingInReply = False, log = Tru
         "message_id":"""+msgToReply+"""
         }
     }\n"""
+    payload = payload.encode(encoding='utf-8')
     print("Payload:"+payload)
     conn.request("POST", "/api/v9/channels/"+daChannelID+"/messages", payload, headers)
     daCount += 1
