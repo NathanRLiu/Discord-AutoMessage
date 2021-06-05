@@ -52,7 +52,10 @@ def sendReply(daChannelID, daMessage, msgToReply, pingInReply = False, log = Tru
     "content": " """+daMessage+""" ",
     "nonce": """+str(daCount)+""",
     "tts": false,
-    "message_reference": """+msgToReply+"""
+    "message_reference": {
+        "channel_id":"""+daChannelID+""",
+        "message_id":"""+msgToReply+"""
+        }
     }\n"""
     print("Payload:"+payload)
     conn.request("POST", "/api/v9/channels/"+daChannelID+"/messages", payload, headers)
@@ -67,4 +70,4 @@ def getMessages(daChannelID, daRange):
     response = conn.getresponse()
     data = response.read()
     data = json.loads(data.decode("utf-8"))
-    return(data[0:daRange]-1)
+    return(data[0:daRange-1])
