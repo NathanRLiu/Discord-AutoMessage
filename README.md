@@ -11,3 +11,22 @@ A robust and versatile solution for automated social interactions
 `import discord-automessage`
 3. After importing the module, you can now reference its functions by calling `discord-automessage.functionName`, for example: 
 `discord-automessage.sendMessage(channelID,"Hello World!")`
+## LIST OF FUNCTIONS ##
+`sendMessage(daChannelID, daMessage)`
+
+### WHERE: ###
+* daChannelID is a `string` which is passed as the ID of the channel.
+* daMessage is a `string` which is passed as the content of the message.
+
+`sendReply(daChannelID, daMessage, msgToReply)`
+
+### WHERE: ###
+* daChannelID is a `string` or `int` which is passed as the ID of the channel.
+* daMessage is a `string` which is passed as the content of the message.
+* msgToReply is a `string` or `int` which is the messageID of the message to reply to
+
+`getMessages(daChannelID, daRange)`
+
+### WHERE: ###
+* daChannelID is a `string` which is passed as the ID of the channel.
+* daRange is an `int` which denotes how many messages you want returned.
