@@ -58,3 +58,13 @@ def sendReply(daChannelID, daMessage, msgToReply, pingInReply = False, log = Tru
     conn.request("POST", "/api/v9/channels/"+daChannelID+"/messages", payload, headers)
     daCount += 1
     time.sleep(.25)
+def getMessages(daChannelID, daRange):
+    headers = {
+    'authorization': daToken,
+    'Content-Type': "application/json"
+    }
+    conn.request("GET", "/api/v9/channels/"+daChannelID+"/messages", "", headers)
+    response = conn.getresponse()
+    data = response.read()
+    data = json.loads(data.decode("utf-8"))
+    return(data[0:daRange])
