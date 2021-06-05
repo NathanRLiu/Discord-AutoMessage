@@ -67,4 +67,4 @@ def getMessages(daChannelID, daRange):
     response = conn.getresponse()
     data = response.read()
     data = json.loads(data.decode("utf-8"))
-    return(data[0:daRange])
+    return(data[0:daRange]-1)
