@@ -35,7 +35,7 @@ def sendMessage(daChannelID, daMessage):
     res = conn.getresponse()
     data = res.read()
     print("Payload:"+payload)
-    conn.request("POST", "/api/v9/channels/"+daChannelID+"/messages", payload, headers)
+    conn.request("POST", "/api/v9/channels/"+str(daChannelID)+"/messages", payload, headers)
     daCount += 1
     time.sleep(.25)
 def sendReply(daChannelID, daMessage, msgToReply, pingInReply = False, log = True):
@@ -66,8 +66,8 @@ def getMessages(daChannelID, daRange):
     'authorization': daToken,
     'Content-Type': "application/json"
     }
-    conn.request("GET", "/api/v9/channels/"+daChannelID+"/messages", "", headers)
+    conn.request("GET", "/api/v9/channels/"+str(daChannelID)+"/messages", "", headers)
     response = conn.getresponse()
     data = response.read()
     data = json.loads(data.decode("utf-8"))
-    return(data[0:daRange-1])
+    return(data[0:daRange])
