@@ -85,6 +85,6 @@ def displayTyping(daChannelID, daDuration):
     'authorization': daToken,
     'Content-Type': "application/json"
     }
-    for i in range(times):
+    for interval in range(times):
         requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/typing", json = "", headers = headers)
         time.sleep(1)
