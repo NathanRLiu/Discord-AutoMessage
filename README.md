@@ -18,6 +18,7 @@ $ git commit -m "Merge Discord-AutoMessage as a subdirectory"
 ``` 
 
 4. Run `$ git pull -s subtree Discord-AutoMessage main` to pull new changes
+5. **Make sure you move creds.py from Discord-AutoMessage to your main project directory(PathToMyProject)**
 
 <sub> You can import from a python file within PathToMyProject by using `import discAutoMsg.discord_automessage as discAutoMsg` .<sub>
 
