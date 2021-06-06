@@ -1,68 +1,69 @@
-import http.client
+import requests
 import json,time
 from config import getCreds
 #LOGIN#
-conn = http.client.HTTPSConnection("discord.com")
+url = "https://discord.com"
 username,password = getCreds()
-payload = "{\"login\":\""+username+"\",\"password\":\""+password+"\"}"
+payload = {"login":username,
+"password":password}
+
+
+session = requests.Session()
+session.get(url)
+daDiscordCookies = session.cookies.get_dict()
 
 headers = {
+    'cookie': daDiscordCookies["__dcfduid"],
     'Content-Type': "application/json"
     }
 
-conn.request("POST", "/api/v9/auth/login", payload, headers)
+loginResponse = requests.request("POST", url+"/api/v9/auth/login", json = payload, headers = headers)
 
-res = conn.getresponse()
-data = res.read()
-daToken = json.loads(data.decode("utf-8"))["token"]
+
+print(loginResponse.text)
+daToken = eval(loginResponse.text)["token"]
 #LOGIN IS DONE AT THIS POINT#
 
 daCount = 0
 
 def sendMessage(daChannelID, daMessage):
-    conn = http.client.HTTPSConnection("discord.com")
     global daCount
-    payload = ""
 
     headers = {
     'authorization': daToken,
     'Content-Type': "application/json"
     }
 
-    conn.request("GET", "/api/v9/channels/"+daChannelID+"/messages", payload, headers)
-    payload = "{\"content\": \""+daMessage+"\",\n\"nonce\": "+str(daCount)+",\n\"tts\": false}"
+    payload ={"content": daMessage,
+    "nonce": str(daCount),
+    "tts": False}
     
-    res = conn.getresponse()
-    data = res.read()
     
-    print("Payload:"+payload)
-    payload = payload.encode(encoding='utf-8')
-    conn.request("POST", "/api/v9/channels/"+str(daChannelID)+"/messages", payload, headers)
+    print("Payload:"+str(payload))
+    requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/messages", json = payload, headers = headers)
     daCount += 1
     time.sleep(.25)
 def sendReply(daChannelID, daMessage, msgToReply, pingInReply = False, log = True):
-    conn = http.client.HTTPSConnection("discord.com")
     global daCount
-    payload = ""
 
     headers = {
     'authorization': daToken,
     'Content-Type': "application/json"
     }
 
-    payload = """{
-    "content": " """+daMessage+""" ",
-    "nonce": """+str(daCount)+""",
-    "tts": false,
+    payload = {
+    "content": daMessage,
+    "nonce": str(daCount),
+    "tts": False,
     "message_reference": {
-        "channel_id":"""+daChannelID+""",
-        "message_id":"""+msgToReply+"""
+        "channel_id":daChannelID,
+        "message_id":msgToReply
         }
-    }\n"""
+    }
     print("Payload:"+payload)
     payload = payload.encode(encoding='utf-8')
   
-    conn.request("POST", "/api/v9/channels/"+daChannelID+"/messages", payload, headers)
+    requests.request("POST", url+"/api/v9/channels/"+daChannelID+"/messages", json = payload, headers = headers)
     daCount += 1
     time.sleep(.25)
 def getMessages(daChannelID, daRange):
@@ -70,8 +71,7 @@ def getMessages(daChannelID, daRange):
     'authorization': daToken,
     'Content-Type': "application/json"
     }
-    conn.request("GET", "/api/v9/channels/"+str(daChannelID)+"/messages", "", headers)
-    response = conn.getresponse()
-    data = response.read()
-    data = json.loads(data.decode("utf-8"))
+    daChannelMessages = requests.request("GET", url+"/api/v9/channels/"+str(daChannelID)+"/messages", json = "", headers = headers)
+    print(daChannelMessages)
+    data = eval(daChannelMessages.text)
     return(data[0:daRange])
