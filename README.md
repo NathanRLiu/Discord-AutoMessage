@@ -17,7 +17,7 @@ $ git read-tree --prefix=discAutoMsg/ -u Discord-AutoMessage/main
 $ git commit -m "Merge Discord-AutoMessage as a subdirectory"
 ``` 
 
-4. Run `$ git pull -s subtree Discord-AutoMessage/main` to pull new changes
+4. Run `$ git pull -s subtree Discord-AutoMessage main` to pull new changes
 
 <sub> You can import from a python file within PathToMyProject by using `import discAutoMsg.discord_automessage as discAutoMsg` .<sub>
 
