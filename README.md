@@ -19,6 +19,8 @@ $ git commit -m "Merge Discord-AutoMessage as a subdirectory"
 
 4. Run `$ git pull -s subtree Discord-AutoMessage/main` to pull new changes
 
+<sub> You can import from a python file within PathToMyProject by using `import discAutoMsg.discord_automessage as discAutoMsg` .<sub>
+
 ### OR ###
 1. Download the ZIP from the GitHub Repository
 2. Extract the ZIP
