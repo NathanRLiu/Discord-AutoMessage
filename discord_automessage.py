@@ -90,4 +90,3 @@ def displayTyping(daChannelID, daDuration):
     for interval in range(times):
         requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/typing", json = "", headers = headers)
         time.sleep(1)
-getMessages("716140536095965194",1)
