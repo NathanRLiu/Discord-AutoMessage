@@ -71,6 +71,7 @@ def sendReply(daChannelID, daMessage, msgToReply, pingInReply = True, log = True
     time.sleep(.25)
 def getMessages(daChannelID, daRange):
     headers = {
+    'cookie': daDiscordCookies["__dcfduid"],
     'authorization': daToken,
     'Content-Type': "application/json"
     }
