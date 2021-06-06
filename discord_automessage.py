@@ -30,6 +30,7 @@ def sendMessage(daChannelID, daMessage):
     global daCount
 
     headers = {
+    'cookie': daDiscordCookies["__dcfduid"],
     'authorization': daToken,
     'Content-Type': "application/json"
     }
@@ -47,6 +48,7 @@ def sendReply(daChannelID, daMessage, msgToReply, pingInReply = True, log = True
     global daCount
 
     headers = {
+    'cookie': daDiscordCookies["__dcfduid"],
     'authorization': daToken,
     'Content-Type': "application/json"
     }
@@ -60,7 +62,6 @@ def sendReply(daChannelID, daMessage, msgToReply, pingInReply = True, log = True
         "message_id":msgToReply
         }
     }
-
     print("Payload:"+str(payload))
   
     requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/messages", json = payload, headers = headers)
@@ -78,12 +79,10 @@ def getMessages(daChannelID, daRange):
 def displayTyping(daChannelID, daDuration):
     times = round(daDuration/1)
     headers = {
-    'cookie': "__dcfduid=",
+    'cookie': daDiscordCookies["__dcfduid"],
     'authorization': daToken,
     'Content-Type': "application/json"
     }
     for i in range(times):
         requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/typing", json = "", headers = headers)
         time.sleep(1)
-sendReply(716140536095965194, 850917229297532938, "This is a test for reply pinging. This should ping you.")
-sendReply(716140536095965194, 850917229297532938, "This is a test for reply pinging. This should not ping you.", False)
