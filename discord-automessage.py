@@ -76,7 +76,7 @@ def getMessages(daChannelID, daRange):
     data = eval(daChannelMessages.text)
     return(data[0:daRange])
 def displayTyping(daChannelID, daDuration):
-    times = round(daDuration/5)
+    times = round(daDuration/1)
     headers = {
     'cookie': "__dcfduid=",
     'authorization': daToken,
@@ -84,4 +84,4 @@ def displayTyping(daChannelID, daDuration):
     }
     for i in range(times):
         requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/typing", json = "", headers = headers)
-        time.sleep(5)
+        time.sleep(1)
