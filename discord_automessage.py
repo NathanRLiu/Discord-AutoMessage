@@ -62,6 +62,8 @@ def sendReply(daChannelID, daMessage, msgToReply, pingInReply = True, log = True
         "message_id":msgToReply
         }
     }
+    if pingInReply == False:
+        payload["allowed_mentions"] = {"parse":["users","roles","everyone"],"replied_user":False}
     print("Payload:"+str(payload))
   
     requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/messages", json = payload, headers = headers)
