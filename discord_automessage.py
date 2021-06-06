@@ -75,9 +75,10 @@ def getMessages(daChannelID, daRange):
     'authorization': daToken,
     'Content-Type': "application/json"
     }
-    daChannelMessages = requests.request("GET", url+"/api/v9/channels/"+str(daChannelID)+"/messages", json = "", headers = headers)
+    print(url+"/api/v9/channels/"+str(daChannelID)+"/messages")
+    daChannelMessages = requests.request("GET", url+"/api/v9/channels/"+str(daChannelID)+"/messages", headers = headers)
     print(daChannelMessages)
-    data = eval(daChannelMessages.text)
+    data = json.loads(daChannelMessages.text)
     return(data[0:daRange])
 def displayTyping(daChannelID, daDuration):
     times = round(daDuration/1)
@@ -89,3 +90,4 @@ def displayTyping(daChannelID, daDuration):
     for interval in range(times):
         requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/typing", json = "", headers = headers)
         time.sleep(1)
+getMessages("716140536095965194",1)
