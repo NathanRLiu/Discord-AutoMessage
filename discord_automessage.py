@@ -43,7 +43,7 @@ def sendMessage(daChannelID, daMessage):
     requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/messages", json = payload, headers = headers)
     daCount += 1
     time.sleep(.25)
-def sendReply(daChannelID, daMessage, msgToReply, pingInReply = False, log = True):
+def sendReply(daChannelID, daMessage, msgToReply, pingInReply = True, log = True):
     global daCount
 
     headers = {
@@ -60,10 +60,10 @@ def sendReply(daChannelID, daMessage, msgToReply, pingInReply = False, log = Tru
         "message_id":msgToReply
         }
     }
-    print("Payload:"+payload)
-    payload = payload.encode(encoding='utf-8')
+
+    print("Payload:"+str(payload))
   
-    requests.request("POST", url+"/api/v9/channels/"+daChannelID+"/messages", json = payload, headers = headers)
+    requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/messages", json = payload, headers = headers)
     daCount += 1
     time.sleep(.25)
 def getMessages(daChannelID, daRange):
@@ -85,3 +85,5 @@ def displayTyping(daChannelID, daDuration):
     for i in range(times):
         requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/typing", json = "", headers = headers)
         time.sleep(1)
+sendReply(716140536095965194, 850917229297532938, "This is a test for reply pinging. This should ping you.")
+sendReply(716140536095965194, 850917229297532938, "This is a test for reply pinging. This should not ping you.", False)
