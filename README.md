@@ -51,3 +51,5 @@ $ git commit -m "Merge Discord-AutoMessage as a subdirectory"
 ### WHERE: ###
 * daChannelID is a `string` which is passed as the ID of the channel.
 * daRange is an `int` which denotes how many messages you want returned.
+  
+<sub> For usage examples, check out my other project: https://github.com/NathanRLiu/SimpTron-3000 <sub>
