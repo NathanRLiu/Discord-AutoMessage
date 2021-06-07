@@ -34,7 +34,7 @@ $ git commit -m "Merge Discord-AutoMessage as a subdirectory"
 3. After importing the module, you can now reference its functions by calling `discord-automessage.functionName`, for example: 
 `discord-automessage.sendMessage(channelID,"Hello World!")`
   
-# All Functions & Locations 🗺️
+# All Functions 🗺️
 `sendMessage(daChannelID, daMessage)`
 
 * daChannelID is a `string` which is passed as the ID of the channel.
