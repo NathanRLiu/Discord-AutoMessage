@@ -119,8 +119,8 @@ def searchMessages(daGuildID,isDMs=False,**kwargs):
     for page in range(0,totalPages):
         daURL += "&offset="+str(totalPages)
         requestResponse = requests.request("GET", daURL, headers = headers)
+        print(str(page)+str(requestResponse))
         messageList.extend(json.loads(requestResponse.text)["messages"])
         print(json.loads(requestResponse.text))
-        print(page)
         time.sleep(1)
     return(messageList)
