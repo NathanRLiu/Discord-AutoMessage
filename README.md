@@ -6,15 +6,15 @@ A robust and versatile solution for automated social interactions through Python
 2. cd into your project directory.
 3. Run the following commands below to make a subtree.
 ```
-$ cd C:/PathToMyProject
+cd C:/PathToMyProject
 
-$ git remote add -f Discord-AutoMessage https://github.com/NathanRLiu/Discord-AutoMessage
+git remote add -f Discord-AutoMessage https://github.com/NathanRLiu/Discord-AutoMessage
 
-$ git merge -s ours --no-commit --allow-unrelated-histories Discord-AutoMessage/main
+git merge -s ours --no-commit --allow-unrelated-histories Discord-AutoMessage/main
 
-$ git read-tree --prefix=discAutoMsg/ -u Discord-AutoMessage/main
+git read-tree --prefix=discAutoMsg/ -u Discord-AutoMessage/main
 
-$ git commit -m "Merge Discord-AutoMessage as a subdirectory"
+git commit -m "Merge Discord-AutoMessage as a subdirectory"
 ``` 
 
 4. Run `$ git pull -s subtree Discord-AutoMessage main` to pull new changes
