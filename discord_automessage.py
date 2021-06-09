@@ -1,6 +1,8 @@
 import requests
 import json,time
 import random
+import math
+import urllib.parse
 from config import getCreds
 #LOGIN#
 url = "https://discord.com"
@@ -93,3 +95,54 @@ def displayTyping(daChannelID, daDuration):
     for interval in range(times):
         requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/typing", json = "", headers = headers)
         time.sleep(1)
+def searchMessages(daGuildID,isDMs=False,**kwargs):
+    headers = {
+    'cookie': daDiscordCookies["__dcfduid"],
+    'authorization': daToken,
+    'Content-Type': "application/json"
+    }
+    requestResponse = None
+    daURL = ""
+    if isDMs == False:
+        daURL = url+"/api/v9/guilds/"+str(daGuildID)+"/messages/search?"
+    else:
+        daURL = url+"/api/v9/channels/"+str(daGuildID)+"/messages/search?"
+    for key,value in kwargs.items():
+        firstQuery = True
+        if key == "author_id":
+            if firstQuery != True:
+                daURL+=r"&"
+            firstQuery = False
+            daURL+=key
+            daURL+="="
+            daURL+=value
+        elif key == "has":
+            if firstQuery != True:
+                daURL+=r"&"
+            firstQuery = False
+            daURL+=key
+            daURL+="="
+            daURL+=value
+        elif key == "channel_id":
+            if firstQuery != True:
+                daURL+= r"&"
+            firstQuery = False
+            daURL+=key
+            daURL+="="
+            daURL+=value
+        elif key == "mentions":
+            if firstQuery != True:
+                daURL+=r"&"
+            firstQuery = False
+            daURL+=key
+            daURL+="="
+            daURL+=value
+    requestResponse = requests.request("GET", daURL, headers = headers)
+    totalPages = math.ceil(json.loads(requestResponse.text)["total_results"]/25)
+    messageList = []
+    for page in range(0,totalPages):
+        daURL += "&offset="+totalPages
+        requestResponse = requests.request("GET", daURL, headers = headers)
+        messageList.append(page)
+    print(messageList)
+searchMessages("716121096197242890")
