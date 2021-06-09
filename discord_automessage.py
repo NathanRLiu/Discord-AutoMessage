@@ -109,46 +109,18 @@ def searchMessages(daGuildID,isDMs=False,**kwargs):
         daURL = url+"/api/v9/guilds/"+str(daGuildID)+"/messages/search?"
     else:
         daURL = url+"/api/v9/channels/"+str(daGuildID)+"/messages/search?"
-    for key,value in kwargs.items():
-        firstQuery = True
-        if key == "author_id":
-            if firstQuery != True:
-                daURL+=r"&"
-            firstQuery = False
-            daURL+=key
-            daURL+="="
-            daURL+=str(value)
-        elif key == "has":
-            if firstQuery != True:
-                daURL+=r"&"
-            firstQuery = False
-            daURL+=key
-            daURL+="="
-            daURL+=str(value)
-        elif key == "channel_id":
-            if firstQuery != True:
-                daURL+= r"&"
-            firstQuery = False
-            daURL+=key
-            daURL+="="
-            daURL+=str(value)
-        elif key == "mentions":
-            if firstQuery != True:
-                daURL+=r"&"
-            firstQuery = False
-            daURL+=key
-            daURL+="="
-            daURL+=str(value)
-    requestResponse = requests.request("GET", daURL, headers = headers)
+
+    daURL+=urllib.parse.urlencode(kwargs)
     print(daURL)
-    print(requestResponse)
-    print(requestResponse.text)
+    requestResponse = requests.request("GET", daURL, headers = headers)
+
     totalPages = math.ceil(json.loads(requestResponse.text)["total_results"]/25)
     messageList = []
     for page in range(0,totalPages):
         daURL += "&offset="+str(totalPages)
         requestResponse = requests.request("GET", daURL, headers = headers)
         messageList.extend(json.loads(requestResponse.text)["messages"])
+        print(json.loads(requestResponse.text))
         print(page)
         time.sleep(1)
     return(messageList)
