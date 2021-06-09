@@ -3,6 +3,8 @@ import json,time
 import random
 import math
 import urllib.parse
+
+from requests.api import request
 from config import getCreds
 #LOGIN#
 url = "https://discord.com"
@@ -115,34 +117,38 @@ def searchMessages(daGuildID,isDMs=False,**kwargs):
             firstQuery = False
             daURL+=key
             daURL+="="
-            daURL+=value
+            daURL+=str(value)
         elif key == "has":
             if firstQuery != True:
                 daURL+=r"&"
             firstQuery = False
             daURL+=key
             daURL+="="
-            daURL+=value
+            daURL+=str(value)
         elif key == "channel_id":
             if firstQuery != True:
                 daURL+= r"&"
             firstQuery = False
             daURL+=key
             daURL+="="
-            daURL+=value
+            daURL+=str(value)
         elif key == "mentions":
             if firstQuery != True:
                 daURL+=r"&"
             firstQuery = False
             daURL+=key
             daURL+="="
-            daURL+=value
+            daURL+=str(value)
     requestResponse = requests.request("GET", daURL, headers = headers)
+    print(daURL)
+    print(requestResponse)
+    print(requestResponse.text)
     totalPages = math.ceil(json.loads(requestResponse.text)["total_results"]/25)
     messageList = []
     for page in range(0,totalPages):
-        daURL += "&offset="+totalPages
+        daURL += "&offset="+str(totalPages)
         requestResponse = requests.request("GET", daURL, headers = headers)
-        messageList.append(page)
-    print(messageList)
-searchMessages("716121096197242890")
+        messageList.extend(json.loads(requestResponse.text)["messages"])
+        print(page)
+        time.sleep(1)
+    return(messageList)
