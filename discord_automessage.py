@@ -113,6 +113,7 @@ def searchMessages(daGuildID,isDMs=False,**kwargs):
     daURL+=urllib.parse.urlencode(kwargs)
     print(daURL)
     requestResponse = requests.request("GET", daURL, headers = headers)
+    print(requestResponse)
     print(requestResponse.text)
     totalPages = math.ceil(json.loads(requestResponse.text)["total_results"]/25)
     messageList = []
@@ -129,4 +130,3 @@ def searchMessages(daGuildID,isDMs=False,**kwargs):
         #print(json.loads(requestResponse.text))
         time.sleep(1)
     return(messageList)
-searchMessages(716121096197242890)
