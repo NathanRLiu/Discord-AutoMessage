@@ -80,13 +80,40 @@ def getMessages(daChannelID, daRange, log = True):
     'authorization': daToken,
     'Content-Type': "application/json"
     }
-    if log == True:
-        print(url+"/api/v9/channels/"+str(daChannelID)+"/messages")
-    daChannelMessages = requests.request("GET", url+"/api/v9/channels/"+str(daChannelID)+"/messages", headers = headers)
-    if log == True:
+    if daRange <= 100:
+        daURL = url+"/api/v9/channels/"+str(daChannelID)+"/messages?"
+        daURL += urllib.parse.urlencode({"limit":daRange})
+        if log == True:
+            print(url+"/api/v9/channels/"+str(daChannelID)+"/messages")
+        daChannelMessages = requests.request("GET", daURL, headers = headers)
         print(daChannelMessages)
-    data = json.loads(daChannelMessages.text)
-    return(data[0:daRange])
+        if log == True:
+            print(daChannelMessages.text)
+        data = json.loads(daChannelMessages.text)
+        return(data[0:daRange])
+    else:
+        returnMessages = []
+        lastMessageID = None
+        for i in range(math.ceil(daRange/100)):
+            print(math.ceil(daRange/100))
+            if lastMessageID == None:
+                daURL = url+"/api/v9/channels/"+str(daChannelID)+"/messages?"
+                daURL += urllib.parse.urlencode({"limit":100})
+                daChannelMessages = requests.request("Get",daURL, headers=headers)
+                daChannelMessages = json.loads(daChannelMessages.text)
+                print(daChannelMessages)
+                lastMessageID = daChannelMessages[len(daChannelMessages)-1]
+                returnMessages.extend(daChannelMessages)
+            else:
+                daURL = url+"/api/v9/channels/"+str(daChannelID)+"/messages?"
+                daURL += urllib.parse.urlencode({"limit":100,"before":lastMessageID["id"]})
+                daChannelMessages = requests.request("Get",daURL, headers=headers)
+                daChannelMessages = json.loads(daChannelMessages.text)
+                print(daChannelMessages)
+                lastMessageID = daChannelMessages[len(daChannelMessages)-1]
+                returnMessages.extend(daChannelMessages)
+        print(len(returnMessages))
+        return(returnMessages[0:daRange])
 def displayTyping(daChannelID, daDuration):
     times = round(daDuration/1)
     headers = {
@@ -120,13 +147,16 @@ def searchMessages(daGuildID,isDMs=False,**kwargs):
     for page in range(0,totalPages):
         daNewURL = ""
         if kwargs:
+            print("kwargs")
             daNewURL = daURL + "&offset="+str(page)
         else:
+            print("no kwargs")
             daNewURL = daURL + "offset="+str(page)
         print(daNewURL)
         requestResponse = requests.request("GET", daNewURL, headers = headers)
         print(str(page)+str(requestResponse))
         messageList.extend(json.loads(requestResponse.text)["messages"])
         #print(json.loads(requestResponse.text))
-        time.sleep(1)
+        if page % 5 == 0:
+            time.sleep(6)
     return(messageList)
