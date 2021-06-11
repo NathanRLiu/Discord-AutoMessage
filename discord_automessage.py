@@ -54,7 +54,6 @@ def channelInfo(daChannelID):
     print(url+"/channels/"+str(daChannelID))
     daChannelInfo = requests.request("GET", url+"/channels/"+str(daChannelID))
     return daChannelInfo.text
-print(channelInfo(716140536095965194))
 def sendReply(daChannelID, daMessage, msgToReply, pingInReply = True, log = True):
 
     headers = {
