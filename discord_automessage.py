@@ -50,6 +50,11 @@ def sendMessage(daChannelID, daMessage, log = True):
         print("Payload:"+str(payload))
     requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/messages", json = payload, headers = headers)
     time.sleep(.25)
+def channelInfo(daChannelID):
+    print(url+"/channels/"+str(daChannelID))
+    daChannelInfo = requests.request("GET", url+"/channels/"+str(daChannelID))
+    return daChannelInfo.text
+print(channelInfo(716140536095965194))
 def sendReply(daChannelID, daMessage, msgToReply, pingInReply = True, log = True):
 
     headers = {
@@ -138,25 +143,5 @@ def searchMessages(daGuildID,isDMs=False,**kwargs):
         daURL = url+"/api/v9/channels/"+str(daGuildID)+"/messages/search?"
 
     daURL+=urllib.parse.urlencode(kwargs)
-    print(daURL)
     requestResponse = requests.request("GET", daURL, headers = headers)
-    print(requestResponse)
-    print(requestResponse.text)
-    totalPages = math.ceil(json.loads(requestResponse.text)["total_results"]/25)
-    messageList = []
-    for page in range(0,totalPages):
-        daNewURL = ""
-        if kwargs:
-            print("kwargs")
-            daNewURL = daURL + "&offset="+str(page)
-        else:
-            print("no kwargs")
-            daNewURL = daURL + "offset="+str(page)
-        print(daNewURL)
-        requestResponse = requests.request("GET", daNewURL, headers = headers)
-        print(str(page)+str(requestResponse))
-        messageList.extend(json.loads(requestResponse.text)["messages"])
-        #print(json.loads(requestResponse.text))
-        if page % 5 == 0:
-            time.sleep(6)
-    return(messageList)
+    return(requestResponse.text)
