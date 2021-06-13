@@ -142,7 +142,6 @@ def exportMessages(daChannelID,daRange,log=True):
             daChannelMessages = requests.request("Get",daURL, headers=headers)
             daChannelMessages = json.loads(daChannelMessages.text)
             lastMessageID = daChannelMessages[len(daChannelMessages)-1]
-            print("Contents: "+ returnMessages.read())
             returnMessages.extend(daChannelMessages)
     returnMessagesFile = open("TestDoc","w",encoding="utf-8")
     returnMessagesFile.write(str(returnMessages))
