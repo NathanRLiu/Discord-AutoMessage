@@ -118,6 +118,36 @@ def getMessages(daChannelID, daRange, log = True):
                 returnMessages.extend(daChannelMessages)
         print(len(returnMessages))
         return(returnMessages[0:daRange])
+def exportMessages(daChannelID,daRange,log=True):
+    headers = {
+    'cookie': daDiscordCookies["__dcfduid"],
+    'authorization': daToken,
+    'Content-Type': "application/json"
+    }
+    returnMessages = []
+    for i in range(math.ceil(daRange/100)):
+        lastMessageID = None
+        if log==True:
+            print(i)
+        if lastMessageID == None:
+            daURL = url+"/api/v9/channels/"+str(daChannelID)+"/messages?"
+            daURL += urllib.parse.urlencode({"limit":100})
+            daChannelMessages = requests.request("Get",daURL, headers=headers)
+            daChannelMessages = json.loads(daChannelMessages.text)
+            lastMessageID = daChannelMessages[len(daChannelMessages)-1]
+            returnMessages.extend(daChannelMessages)
+        else:
+            daURL = url+"/api/v9/channels/"+str(daChannelID)+"/messages?"
+            daURL += urllib.parse.urlencode({"limit":100,"before":lastMessageID["id"]})
+            daChannelMessages = requests.request("Get",daURL, headers=headers)
+            daChannelMessages = json.loads(daChannelMessages.text)
+            lastMessageID = daChannelMessages[len(daChannelMessages)-1]
+            print("Contents: "+ returnMessages.read())
+            returnMessages.extend(daChannelMessages)
+    returnMessagesFile = open("TestDoc","w",encoding="utf-8")
+    returnMessagesFile.write(str(returnMessages))
+    return(returnMessagesFile)
+
 def displayTyping(daChannelID, daDuration):
     times = round(daDuration/1)
     headers = {
