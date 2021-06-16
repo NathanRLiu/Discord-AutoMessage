@@ -118,30 +118,38 @@ def getMessages(daChannelID, daRange, log = True):
                 returnMessages.extend(daChannelMessages)
         print(len(returnMessages))
         return(returnMessages[0:daRange])
-def exportMessages(daChannelID,daRange,log=True):
+def exportMessages(daChannelID,log=True):
     headers = {
     'cookie': daDiscordCookies["__dcfduid"],
     'authorization': daToken,
     'Content-Type': "application/json"
     }
     returnMessages = []
-    for i in range(math.ceil(daRange/100)):
-        lastMessageID = None
+    lastMessage = None
+    i=0
+    daChannelMessages = None
+    while True:
+        i += 1
         if log==True:
             print(i)
-        if lastMessageID == None:
+        if lastMessage == None:
+            print("lastMessageID is None")
             daURL = url+"/api/v9/channels/"+str(daChannelID)+"/messages?"
             daURL += urllib.parse.urlencode({"limit":100})
             daChannelMessages = requests.request("Get",daURL, headers=headers)
             daChannelMessages = json.loads(daChannelMessages.text)
-            lastMessageID = daChannelMessages[len(daChannelMessages)-1]
+            lastMessage = daChannelMessages[len(daChannelMessages)-1]
             returnMessages.extend(daChannelMessages)
         else:
             daURL = url+"/api/v9/channels/"+str(daChannelID)+"/messages?"
-            daURL += urllib.parse.urlencode({"limit":100,"before":lastMessageID["id"]})
+            daURL += urllib.parse.urlencode({"limit":100,"before":lastMessage["id"]})
             daChannelMessages = requests.request("Get",daURL, headers=headers)
             daChannelMessages = json.loads(daChannelMessages.text)
-            lastMessageID = daChannelMessages[len(daChannelMessages)-1]
+            print(lastMessage["id"])
+            if daChannelMessages == []:
+                break
+            lastMessage = daChannelMessages[len(daChannelMessages)-1]
+            print(len(daChannelMessages))
             returnMessages.extend(daChannelMessages)
     returnMessagesFile = open("TestDoc","w",encoding="utf-8")
     returnMessagesFile.write(str(returnMessages))
@@ -169,7 +177,7 @@ def searchMessages(daGuildID,isDMs=False,**kwargs):
         daURL = url+"/api/v9/guilds/"+str(daGuildID)+"/messages/search?"
     else:
         daURL = url+"/api/v9/channels/"+str(daGuildID)+"/messages/search?"
-
+    print(daURL)
     daURL+=urllib.parse.urlencode(kwargs)
     requestResponse = requests.request("GET", daURL, headers = headers)
     return(requestResponse.text)
