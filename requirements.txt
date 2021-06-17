@@ -1,1 +1,0 @@
-text2emotion==0.0.5
