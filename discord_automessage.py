@@ -3,6 +3,7 @@ import json,time
 import random
 import math
 import urllib.parse
+import pickle
 
 from requests.api import request
 from config import getCreds
@@ -118,7 +119,7 @@ def getMessages(daChannelID, daRange, log = True):
                 returnMessages.extend(daChannelMessages)
         print(len(returnMessages))
         return(returnMessages[0:daRange])
-def exportMessages(daChannelID,log=True):
+def exportMessages(daChannelID,fileName = "messages.list",log=True):
     headers = {
     'cookie': daDiscordCookies["__dcfduid"],
     'authorization': daToken,
@@ -151,9 +152,9 @@ def exportMessages(daChannelID,log=True):
             lastMessage = daChannelMessages[len(daChannelMessages)-1]
             print(len(daChannelMessages))
             returnMessages.extend(daChannelMessages)
-    returnMessagesFile = open("TestDoc","w",encoding="utf-8")
-    returnMessagesFile.write(str(returnMessages))
-    return(returnMessagesFile)
+    with open(fileName,'wb') as exportFile:
+        returnMessages = pickle.dump(returnMessages,exportFile)
+    return(returnMessages)
 
 def displayTyping(daChannelID, daDuration):
     times = round(daDuration/1)
