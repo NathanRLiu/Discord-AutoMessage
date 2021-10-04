@@ -35,6 +35,13 @@ def createNonce():
     for digit in range(1,16):
         daNonce += str(random.randint(0,9))
     return(daNonce)
+def sendFile(daChannelID, pathToFile):
+    headers = {
+    'cookie': daDiscordCookies["__dcfduid"],
+    'authorization': daToken
+    }
+    files = {"media":open(pathToFile,'rb')}
+    requests.request("POST", url+"/api/v9/channels/"+str(daChannelID)+"/messages", files = files, headers = headers, )
 
 def sendMessage(daChannelID, daMessage, log = True):
     headers = {
