@@ -126,7 +126,7 @@ def getMessages(daChannelID, daRange, log = True):
                 returnMessages.extend(daChannelMessages)
         print(len(returnMessages))
         return(returnMessages[0:daRange])
-def exportMessages(daChannelID,fileName = "messages.list",log=True):
+def exportMessages(daChannelID,fileName = "messages.list",log=False):
     headers = {
     'cookie': daDiscordCookies["__dcfduid"],
     'authorization': daToken,
@@ -138,10 +138,7 @@ def exportMessages(daChannelID,fileName = "messages.list",log=True):
     daChannelMessages = None
     while True:
         i += 1
-        if log==True:
-            print(i)
         if lastMessage == None:
-            print("lastMessageID is None")
             daURL = url+"/api/v9/channels/"+str(daChannelID)+"/messages?"
             daURL += urllib.parse.urlencode({"limit":100})
             daChannelMessages = requests.request("Get",daURL, headers=headers)
@@ -153,11 +150,9 @@ def exportMessages(daChannelID,fileName = "messages.list",log=True):
             daURL += urllib.parse.urlencode({"limit":100,"before":lastMessage["id"]})
             daChannelMessages = requests.request("Get",daURL, headers=headers)
             daChannelMessages = json.loads(daChannelMessages.text)
-            print(lastMessage["id"])
             if daChannelMessages == []:
                 break
             lastMessage = daChannelMessages[len(daChannelMessages)-1]
-            print(len(daChannelMessages))
             returnMessages.extend(daChannelMessages)
     with open(fileName,'wb') as exportFile:
         returnMessages = pickle.dump(returnMessages,exportFile)
