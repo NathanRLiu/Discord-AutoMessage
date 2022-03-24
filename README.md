@@ -29,9 +29,9 @@ git commit -m "Merge Discord-AutoMessage as a subdirectory"
   
 # Directions ❗
 1. Either one of the following:
-    a. Get your Discord authentication token and paste it into the config.py file
+    - Get your Discord authentication token and paste it into the config.py file
     OR
-    b. Put your email/password into the config.py file
+    - Put your email/password into the config.py file
 2. You can now import the functions of the module by simply calling 
 `import discord-automessage`
 3. After importing the module, you can now reference its functions by calling `discord-automessage.functionName`, for example: 
